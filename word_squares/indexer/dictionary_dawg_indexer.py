@@ -14,7 +14,8 @@ class DictionaryDAWGIndexer:
     """
     I would have liked to refactor this into a more modular data access layer which could allow the data structure
     to be switched out - providing an abstract base class which could be inherited from, and access methods so that the
-    classes using the DAWG could retrieve prefixes
+    classes using the DAWG could retrieve prefixes. This would have been stateful rather than a static class,
+    and would have made it easier to index and run in one go as it indexes pretty quickly with the provided dictionary
     """
 
     @staticmethod
@@ -28,10 +29,10 @@ class DictionaryDAWGIndexer:
             lines = dictionary.read().splitlines()  # Split lines without /n
 
             word_length_dict = {}
-            max_length = len(
-                max(lines, key=len)
-            )  # Get the longest wrd in the dictionary
+            # Get the longest word in the dictionary TODO split into method
+            max_length = len(max(lines, key=len))
 
+            # TODO split into method to generate empty word length dict
             for i in range(0, max_length):  # once for each word size for 1 to max
                 # add a new key for this word length to the dictionary with an empty list
                 word_length_dict[i + 1] = []
@@ -41,6 +42,7 @@ class DictionaryDAWGIndexer:
                 word_length_dict[len(line)].append(line)
 
             for key, value in word_length_dict.items():  # length, [words]
+                # TODO split into method to generate a DAWG from an array, and one to save a dawg
                 length_dawg = dawg.CompletionDAWG(value)
 
                 save_location = Path(__file__).parents[

@@ -104,6 +104,7 @@ def test_example_4(solver_service):
     assert "".join(result[:, 4]) == "trees"
 
 
+# @pytest.mark.skip(reason="Takes a long time to complete") # Uncomment line to skip this test
 def test_example_5(solver_service):
     """
     Warning, takes in the region of 90s to run this example on my Macbook - this test file takes about 01:53 in total

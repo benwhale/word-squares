@@ -5,9 +5,7 @@ setup(
     version="0.1.0",
     packages=["word_squares"],
     include_package_data=True,
-    install_requires=[
-        "Click",
-    ],
+    install_requires=["Click", "pandas", "dawg", "numpy"],
     entry_points={
         "console_scripts": [
             "word-squares = word_squares.cli.app:cli",

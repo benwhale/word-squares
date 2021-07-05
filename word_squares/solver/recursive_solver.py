@@ -1,11 +1,4 @@
 from word_squares.solver.solver_util import SolverUtil
-import logging
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-fh = logging.FileHandler("word_squares.log", mode="w")
-fh.setLevel(logging.INFO)
-logger.addHandler(fh)
 
 
 class RecursiveSolver:
@@ -30,43 +23,38 @@ class RecursiveSolver:
     def solve(self, word_no, letter_no, remaining_letters, grid):
         """
         Recursive solving function to traverse the grid.
-        Retrives the prefixes for which go through this space on the grid.
+        Retrieves the prefixes for which go through this space on the grid.
         Iterates through the available letter choices and retrieves valid words combining the prefixes with the letter
         If there are valid words on both the vertical and horizontal axes, attempt to place the letters and move to the
         next space in the solution if successful. Returns False if there are no valid letters which can be placed at all
         or returns the result of the recursive calls to solved.
         """
-        logger.info(grid)
-        logger.info("searching for ({0},{1})".format(word_no, letter_no))
         horizontal_prefix = self.get_horizontal_prefix(word_no, grid)
         vertical_prefix = self.get_vertical_prefix(letter_no, grid)
 
-        logger.debug(remaining_letters)
-        search_letters = sorted(
-            list(set(remaining_letters))
-        )  # We only want to try each available letter once per iteration.
-        # Putting it back into a sorted list allows for more predictability
+        search_letters = self.get_unique_letters(remaining_letters)
 
         for letter in search_letters:
-            logger.info("letter: {0}".format(letter))
-
+            # Candidate for refactoring into child method
+            # Find potential words starting with the prefixes
+            # which can be made by the letters available
             horiz_words, vert_words = self.find_valid_words(
                 letter, horizontal_prefix, vertical_prefix
             )
 
             if len(horiz_words) == 0 or len(vert_words) == 0:
-                continue  # Exit iteration - no valid words in either the horizontal or vertical for this letter choice
-
+                # Exit iteration - no valid words in either the horizontal or vertical for this letter choice
+                continue
             try:
+                # Attempt to place letters in grid, raising an error when we do not have enough of the letter to place
                 updated_grid, solution_remaining_letters = self.place_letter(
                     word_no, letter_no, letter, remaining_letters, grid.copy()
                 )
-                logger.debug(
-                    "remaining letters: {0}".format(solution_remaining_letters)
-                )
             except ValueError:
-                continue  # Exit iteration - We have tried to place more of a letter than there is remaining
+                # Exit iteration - We have tried to place more of a letter than there are remaining
+                continue
 
+            # proceed to next recursive solution stage
             solution = self.proceed_with_solution(
                 letter_no, word_no, solution_remaining_letters, updated_grid
             )
@@ -74,7 +62,7 @@ class RecursiveSolver:
             if solution is False:
                 continue  # Exit iteration - No solution down this route, so back up a step
             else:
-                return solution
+                return solution  # Solution has been found, so bubble it up
         return False  # We have reached the end of the letter iteration and there are no valid letters
 
     def proceed_with_solution(
@@ -104,12 +92,12 @@ class RecursiveSolver:
                 updated_grid.copy(),
             )
         elif word_no == self.dimension - 1 and letter_no == self.dimension - 1:
-            # We have completed the final letter
+            # We have successfully completed the final letter
             return updated_grid  # Return the final numpy array
 
     def find_valid_words(self, letter, horizontal_prefix, vertical_prefix):
         """
-        Gets words matching both the horizonal and vertical prefixes, and filters to only include words which can be
+        Gets words matching both the horizontal and vertical prefixes, and filters to only include words which can be
         made by the remaining letters.
         :param letter: the character to add to the prefix
         :param horizontal_prefix: the horizontal prefix representing the letters placed in a row so far
@@ -122,14 +110,9 @@ class RecursiveSolver:
         vert_words = SolverUtil.get_words_matching_prefix(
             self.dawg, (vertical_prefix + letter)
         )
-
-        horiz_words = list(
-            self.filter_words_to_contain_letters(horiz_words)
-        )  # pass in prefix and the remaining words?
+        # TODO is there is a better approach which passes in the remaining letters and current prefix
+        horiz_words = list(self.filter_words_to_contain_letters(horiz_words))
         vert_words = list(self.filter_words_to_contain_letters(vert_words))
-        logger.info("words found")
-        logger.debug(horiz_words)
-        logger.debug(vert_words)
         return horiz_words, vert_words
 
     def place_letter(self, word_no, letter_no, letter, remaining_letters, grid):
@@ -188,7 +171,8 @@ class RecursiveSolver:
 
     def get_horizontal_prefix(self, row_no, grid):
         """
-        Retrives the currently generated prefix by joining the values in the specified row
+        TODO - move to util
+        Retrieves the currently generated prefix by joining the values in the specified row
         :param row_no: the row number to retrieve the prefix from
         :param grid: the grid to retrieve from
         :return: string containing the generated prefix
@@ -198,10 +182,20 @@ class RecursiveSolver:
 
     def get_vertical_prefix(self, col_no, grid):
         """
-        Retrives the currently generated prefix by joining the values in the specified row
+        TODO - move to util
+        Retrieves the currently generated prefix by joining the values in the specified row
         :param col_no: the column number to retrieve the prefix from
         :param grid: the grid to retrieve from
         :return: string containing the generated prefix
         """
         col = grid[:, col_no]
         return "".join(col)
+
+    def get_unique_letters(self, letters):
+        """
+        TODO - move to util
+        Turns a string into an alphabetically sorted list with a single instance of each character.
+        To be used for the letter iteration as we only want to try each letter once per iteration.
+        Putting it back into a sorted list allows for more predictability
+        """
+        return sorted(list(set(letters)))
