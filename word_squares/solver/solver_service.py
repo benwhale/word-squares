@@ -6,6 +6,9 @@ from word_squares.solver.recursive_solver import RecursiveSolver
 
 
 class SolverService:
+    """
+    Service class to handle input validation and data loading, as well as calling the solver to build a solution.
+    """
 
     word_dawg = dawg.CompletionDAWG()
 

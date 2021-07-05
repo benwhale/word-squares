@@ -58,8 +58,8 @@ def test_find_valid_words():
 
 def test_place_letter():
     """
-    Test the two Value error raising cases, and test that the diagonal returns a new letter string with one fewer letter,
-    and the other cases return a letter string with two fewer.
+    Test the two Value error raising cases, and test that the diagonal returns a new letter
+    string with one fewer letter, and the other cases return a letter string with two fewer.
     Test that the grid is in the state expected
     """
     pass

@@ -2,6 +2,8 @@ from word_squares.solver.solver_util import SolverUtil
 
 
 class RecursiveSolver:
+    """Recursive solver class which traverses the grid and builds a solution"""
+
     def __init__(self, dimension, letters, dawg, grid):
         self.dimension = dimension
         self.letters = letters
