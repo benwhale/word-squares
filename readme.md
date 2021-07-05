@@ -96,12 +96,12 @@ Check for linting issues with the command
 ## Extensions and Known issues
 (in note form for discussion)
 
-- Test case with two answers - could be an extension to store successful solutions and then only return when the whole combination of options had been explored
+- Test case with two answers - could be an extension command option to store successful solutions and then only return when the whole combination of options had been explored
 - We could do something smarter to identify if we are placing a middle diagonal letter and cut out some letter iterations in the process
   (we should only use letters with more than one letter of that character if not a diagonal)
-- Data access layer for DAWG library, and maybe for the numpy array
+- Data access layer for DAWG library, and potentially abstraction of the numpy array to allow easy change of storage
 - Failing better when data hasn't been preindexed
 - Build/deployment didn't quite work in time, would have been nice to get that working so it doesn't need installing in development mode.
-- The requirements.txt needs pruning, as the whole scipy stack has been installed. This should be reduced to just the requirements of numpy.
-- Sphinx install to build / render documentation from docstrings
+- The requirements.txt needs pruning, as much of the scipy stack has been installed. This should be reduced to just the requirements of numpy.
+- Method comments are present - this could be built with Sphinx to render readthedocs style documentation from docstrings
 - More unit tests given more time
