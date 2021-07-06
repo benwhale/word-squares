@@ -76,6 +76,11 @@ replacing 4 and the word string with the desired dimension/letters
 
 Some unit tests have been written using Pytest. word_squares/tests/test_demo.py contains each of the examples given.
 The third example has more than one solution, and the program discovers an alternative solution first.
+
+The test suite can be run by invoking
+
+        pytest
+
 I have included a slight hack to allow either solution in the unit test for completion, although in its current form
 the application is predictable so will not produce the result. Removing the cast to list from set in the solve method
 would allow either to be returned, as sets are unordered, but it would be at the expense of the predictability elsewhere.
