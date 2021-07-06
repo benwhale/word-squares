@@ -44,6 +44,7 @@ Once your venv is activated, run
         pip install -r requirements.txt
 
 to install project requirements.
+On a windows machine it may request the installation of Microsoft Visual C++ 14.0 or greater. This is in order to build the underlying DAWG data structure.
 
 Finally run
 
