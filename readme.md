@@ -82,7 +82,7 @@ The test suite can be run by invoking
         pytest
 
 I have included a slight hack to allow either solution in the unit test for completion, although in its current form
-the application is predictable so will not produce the result. Removing the cast to list from set in the solve method
+the application is predictable so will not produce the result. Removing the cast to list from set in the recursive solver `get_unique_letters` method
 would allow either to be returned, as sets are unordered, but it would be at the expense of the predictability elsewhere.
 
 I had limited time to finish off writing the tests I would ideally have written for the application. I have created
@@ -105,7 +105,7 @@ Check for linting issues with the command
 - Test case with two answers - could be an extension command option to store successful solutions and then only return when the whole combination of options had been explored
 - We could do something smarter to identify if we are placing a middle diagonal letter and cut out some letter iterations in the process
   (we should only use letters with more than one letter of that character if not a diagonal)
-- Data access layer for DAWG library, and potentially abstraction of the numpy array to allow easy change of storage
+- Refactoring out a data access layer for the DAWG library, and potentially abstraction of the numpy array to allow easy change of storage classes
 - Failing better when data hasn't been preindexed
 - Build/deployment didn't quite work in time, would have been nice to get that working so it doesn't need installing in development mode.
 - The requirements.txt needs pruning, as much of the scipy stack has been installed. This should be reduced to just the requirements of numpy.
